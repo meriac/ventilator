@@ -50,7 +50,7 @@ void do_breathe(bool force_reset)
   static int angle_src, angle_dst, duration;
 
   unsigned long delta_t;
-  int angle;
+  int angle, pulse_max;
 
   /* enforce state machine reset */
   if(force_reset)
@@ -74,23 +74,26 @@ void do_breathe(bool force_reset)
     if(state_machine > 3)
       state_machine = 0;
 
+    /* calculate breathing amplitude - modulate angle 50%-100% */
+    pulse_max = SERVO_PULSE_MS_MIN+((100+g_breathing_volume)*((long)(SERVO_PULSE_MS_MAX-SERVO_PULSE_MS_MIN))/200);
+
     /* obtain per-state parameters */
     switch(state_machine)
     {
       default:
       case 0:
         angle_src = SERVO_PULSE_MS_MIN;
-        angle_dst = SERVO_PULSE_MS_MAX;
+        angle_dst = pulse_max;
         duration = BREATH_TIME_SLOPE_IN;
         break;
       case 1:
-        angle_src = SERVO_PULSE_MS_MAX;
-        angle_dst = SERVO_PULSE_MS_MAX;
+        angle_src = pulse_max;
+        angle_dst = pulse_max;
         /* inhale 1/3rds of total breating time */
         duration = (((1UL*60*1000)/3)/g_breathing_rate)-BREATH_TIME_SLOPE_IN;
         break;
       case 2:
-        angle_src = SERVO_PULSE_MS_MAX;
+        angle_src = pulse_max;
         angle_dst = SERVO_PULSE_MS_MIN;
         duration = BREATH_TIME_SLOPE_OUT;
         break;
