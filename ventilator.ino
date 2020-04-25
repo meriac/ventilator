@@ -24,8 +24,8 @@
 #define SCREEN_HEIGHT 64
 
 /* servo configuration */
-#define SERVO_PULSE_MS_MIN 1025
-#define SERVO_PULSE_MS_MAX 1120
+#define SERVO_PULSE_MS_MIN 1120
+#define SERVO_PULSE_MS_MAX 1030
 
 /* Global Objects */
 Servo g_servo;
